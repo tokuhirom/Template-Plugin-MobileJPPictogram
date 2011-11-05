@@ -1,5 +1,9 @@
 Revision history for Perl extension Template::Plugin::MobileJPPictogram
 
+0.03
+
+    - modernize package
+
 0.02
 
     - fixed test_deps for YAML
