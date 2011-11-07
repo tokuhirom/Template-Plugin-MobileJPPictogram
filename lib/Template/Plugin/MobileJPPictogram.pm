@@ -3,7 +3,7 @@ package Template::Plugin::MobileJPPictogram;
 use strict;
 use warnings;
 use 5.0080008;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 require Template::Plugin;
 use base qw(Template::Plugin);

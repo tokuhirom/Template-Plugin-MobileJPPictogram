@@ -1,5 +1,9 @@
 Revision history for Perl extension Template::Plugin::MobileJPPictogram
 
+0.05
+
+    - no Test::Base;
+
 0.04
 
     - Test::Base is required
