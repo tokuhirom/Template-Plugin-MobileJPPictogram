@@ -1,15 +1,41 @@
 use strict;
 use warnings;
 use utf8;
-use Test::Base;
+use Test::More;
 use Template;
 use Encode;
 
 # 鬱膣愛味噌
 
-filters {
-    input => [qw/yaml escape/],
-};
+my @tests = (
+    +{
+        input => {
+            template =>
+            "[% USE MobileJPPictogram %][% x | pictogram_charname('***%s***') %]",
+            x        => 'PICT:\x{E754}',
+        },
+        expected => 'PICT:***ウマ***'
+    },
+    {
+        input => {
+            template => q{[% USE MobileJPPictogram %][% x | pictogram_unicode('<img src="/img/pictogram/%04X.gif" />') %]},
+            x        => q!PICT:\x{E754}!,
+        },
+        expected => q{PICT:<img src="/img/pictogram/E754.gif" />},
+    },
+    {
+        input => {
+            template => q{[% USE MobileJPPictogram %][% x | pictogram_unicode('<img src="/img/pictogram/%d.gif" />') %]},
+            x        => q!PICT:\x{E754}!,
+        },
+        expected => q{PICT:<img src="/img/pictogram/59220.gif" />},
+    },
+);
+
+plan tests => 0+@tests;
+for (@tests) {
+    is(escape($_->{input}), $_->{expected}, $_->{expected});
+}
 
 sub decode_uni {
     local $_ = shift;
@@ -24,29 +50,4 @@ sub escape {
     $out;
 }
 
-run_is input => 'expected';
-
-__END__
-
-===
---- input
-template: "[% USE MobileJPPictogram %][% x | pictogram_charname('***%s***') %]"
-x: PICT:\x{E754}
---- expected: PICT:***ウマ***
-
-===
---- input
-template: |+
-    [% USE MobileJPPictogram %][% x | pictogram_unicode('<img src="/img/pictogram/%04X.gif" />') %]
-x: PICT:\x{E754}
---- expected
-PICT:<img src="/img/pictogram/E754.gif" />
-
-===
---- input
-template: |+
-    [% USE MobileJPPictogram %][% x | pictogram_unicode('<img src="/img/pictogram/%d.gif" />') %]
-x: PICT:\x{E754}
---- expected
-PICT:<img src="/img/pictogram/59220.gif" />
 
